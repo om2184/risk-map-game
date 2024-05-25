@@ -51,17 +51,21 @@ public class MapEngine {
   public void showInfoCountry() {
 
     while (true) {
-      MessageCli.INSERT_COUNTRY.printMessage();
-      String playerInput = Utils.scanner.nextLine();
-      String countryName = Utils.capitalizeFirstLetterOfEachWord(playerInput);
+      try {
+        MessageCli.INSERT_COUNTRY.printMessage();
+        String playerInput = Utils.scanner.nextLine();
+        String countryName = Utils.capitalizeFirstLetterOfEachWord(playerInput);
 
-      if (mapData.containsKey(countryName)) {
-        Country country = mapData.get(countryName);
-        MessageCli.COUNTRY_INFO.printMessage(
-            country.getName(), country.getContinent(), Integer.toString(country.getTax()));
-        break;
-      } else {
-        MessageCli.INVALID_COUNTRY.printMessage(countryName);
+        if (mapData.containsKey(countryName)) {
+          Country country = mapData.get(countryName);
+          MessageCli.COUNTRY_INFO.printMessage(
+              country.getName(), country.getContinent(), Integer.toString(country.getTax()));
+          break;
+        } else {
+          throw new InvalidCountryException(countryName);
+        }
+      } catch (InvalidCountryException e) {
+        continue;
       }
     }
   }
