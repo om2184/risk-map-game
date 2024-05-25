@@ -65,7 +65,7 @@ public class MapEngine {
           throw new InvalidCountryException(countryName);
         }
       } catch (InvalidCountryException e) {
-        continue;
+        MessageCli.INVALID_COUNTRY.printMessage(e.getMessage());
       }
     }
   }
