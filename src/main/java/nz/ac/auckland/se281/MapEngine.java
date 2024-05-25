@@ -29,6 +29,30 @@ public class MapEngine {
       Country newCountry = new Country(name, continent, tax);
       mapData.put(name, newCountry);
     }
+
+    for (String neighbour : adjacencies) {
+      String[] neighbourData = neighbour.split(",");
+      String mainCountry = neighbourData[0];
+
+      // if (mapData.containsKey(mainCountry)) {
+      //   Country country = mapData.get(mainCountry);
+      //   for (int i = 1; i < neighbourData.length; i++) {
+      //     String neighbor = neighbourData[i].trim();
+      //     // Ensure the neighbor country is valid and in the map
+      //     if (mapData.containsKey(neighbor)) {
+      //         country.addNeighbor(neighbor);
+      //     }
+      if (mapData.containsKey(mainCountry)) {
+        Country country = mapData.get(mainCountry);
+        for (int i = 1; i < neighbourData.length; i++) {
+          String neighbor = neighbourData[i].trim();
+          // Ensure the neighbor country is valid and in the map
+          if (mapData.containsKey(neighbor)) {
+            country.addNeighbour(neighbor);
+          }
+        }
+      }
+    }
   }
 
   /** this method is invoked when the user run the command info-country. */
