@@ -1,12 +1,16 @@
 package nz.ac.auckland.se281;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /** This class is the main entry point. */
 public class MapEngine {
 
+  private Map<String, List<String>> mapData;
+
   public MapEngine() {
-    // add other code here if you want
+    this.mapData = new HashMap<>();
     loadMap(); // keep this mehtod invocation
   }
 
