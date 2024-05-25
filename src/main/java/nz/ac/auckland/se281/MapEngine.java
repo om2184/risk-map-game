@@ -49,10 +49,12 @@ public class MapEngine {
 
   /** this method is invoked when the user run the command info-country. */
   public void showInfoCountry() {
-
+    MessageCli.INSERT_COUNTRY.printMessage();
     while (true) {
       try {
-        askUserInput();
+        Country country = this.validCountryName();
+        MessageCli.COUNTRY_INFO.printMessage(
+            country.getName(), country.getContinent(), Integer.toString(country.getTax()));
         break;
       } catch (InvalidCountryException e) {
         MessageCli.INVALID_COUNTRY.printMessage(e.getMessage());
@@ -61,17 +63,60 @@ public class MapEngine {
   }
 
   /** this method is invoked when the user run the command route. */
-  public void showRoute() {}
+  public void showRoute() {
 
-  public void askUserInput() throws InvalidCountryException {
-    MessageCli.INSERT_COUNTRY.printMessage();
+    MessageCli.INSERT_SOURCE.printMessage();
+    while (true) {
+      try {
+        Country startNode = this.validCountryName();
+      } catch (InvalidCountryException e) {
+        MessageCli.INVALID_COUNTRY.printMessage(e.getMessage());
+      }
+    }
+
+    // Set<String> visited = new HashSet<>();
+    // Map<String, Country> parentMap = new HashMap<>();
+    // Stack<String> stack = new Stack<>();
+    // stack.push(startNode);
+    // parentMap.put(startNode, null);
+
+    // while (!stack.isEmpty()) {
+    //     T current = stack.pop();
+    //     if (!visited.contains(current)) {
+    //         visited.add(current);
+    //         for (T neighbor : adjacencyMap.get(current)) {
+    //             if (!visited.contains(neighbor)) {
+    //                 stack.push(neighbor);
+    //                 parentMap.put(neighbor, current);
+    //             } else if (!neighbor.equals(parentMap.get(current)) &&
+    // neighbor.equals(startNode)) {
+    //                 // Cycle detected, reconstruct the path
+    //                 List<T> cyclePath = new ArrayList<>();
+    //                 cyclePath.add(neighbor);
+    //                 T node = current;
+    //                 while (node != null) {
+    //                     cyclePath.add(node);
+    //                     node = parentMap.get(node);
+    //                     if (node != null && node.equals(neighbor)) {
+    //                         cyclePath.add(node);
+    //                         break;
+    //                     }
+    //                 }
+    //                 Collections.reverse(cyclePath);
+    //                 return cyclePath;
+    //             }
+    //         }
+    //     }
+    // }
+    // return null; // No cycle found
+  }
+
+  public Country validCountryName() throws InvalidCountryException {
     String playerInput = Utils.scanner.nextLine();
     String countryName = Utils.capitalizeFirstLetterOfEachWord(playerInput);
 
     if (mapData.containsKey(countryName)) {
-      Country country = mapData.get(countryName);
-      MessageCli.COUNTRY_INFO.printMessage(
-          country.getName(), country.getContinent(), Integer.toString(country.getTax()));
+      return mapData.get(countryName);
     } else {
       throw new InvalidCountryException(countryName);
     }
