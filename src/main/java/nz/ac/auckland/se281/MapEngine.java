@@ -30,22 +30,14 @@ public class MapEngine {
       mapData.put(name, newCountry);
     }
 
-    for (String neighbour : adjacencies) {
-      String[] neighbourData = neighbour.split(",");
-      String mainCountry = neighbourData[0];
+    for (String adjacency : adjacencies) {
+      String[] adjacencyData = adjacency.split(",");
+      String mainCountry = adjacencyData[0];
 
-      // if (mapData.containsKey(mainCountry)) {
-      //   Country country = mapData.get(mainCountry);
-      //   for (int i = 1; i < neighbourData.length; i++) {
-      //     String neighbor = neighbourData[i].trim();
-      //     // Ensure the neighbor country is valid and in the map
-      //     if (mapData.containsKey(neighbor)) {
-      //         country.addNeighbor(neighbor);
-      //     }
       if (mapData.containsKey(mainCountry)) {
         Country country = mapData.get(mainCountry);
-        for (int i = 1; i < neighbourData.length; i++) {
-          String neighbor = neighbourData[i].trim();
+        for (int i = 1; i < adjacencyData.length; i++) {
+          String neighbor = adjacencyData[i].trim();
           // Ensure the neighbor country is valid and in the map
           if (mapData.containsKey(neighbor)) {
             country.addNeighbour(neighbor);
@@ -57,7 +49,19 @@ public class MapEngine {
 
   /** this method is invoked when the user run the command info-country. */
   public void showInfoCountry() {
-    // add code here
+
+    while (true) {
+      MessageCli.INSERT_COUNTRY.printMessage();
+      String playerInput = Utils.scanner.nextLine();
+      String countryName = Utils.capitalizeFirstLetterOfEachWord(playerInput);
+
+      if (mapData.containsKey(countryName)) {
+        Country country = mapData.get(countryName);
+        MessageCli.COUNTRY_INFO.printMessage(
+            country.getName(), country.getContinent(), Integer.toString(country.getTax()));
+        break;
+      }
+    }
   }
 
   /** this method is invoked when the user run the command route. */
