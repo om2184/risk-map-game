@@ -60,6 +60,8 @@ public class MapEngine {
         MessageCli.COUNTRY_INFO.printMessage(
             country.getName(), country.getContinent(), Integer.toString(country.getTax()));
         break;
+      } else {
+        MessageCli.INVALID_COUNTRY.printMessage(countryName);
       }
     }
   }
