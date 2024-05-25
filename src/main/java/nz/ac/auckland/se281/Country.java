@@ -1,6 +1,6 @@
 package nz.ac.auckland.se281;
 
-import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 public class Country {
@@ -14,7 +14,7 @@ public class Country {
     this.name = name;
     this.continent = continent;
     this.tax = tax;
-    this.neighbours = new ArrayList<>();
+    this.neighbours = new LinkedList<>();
   }
 
   public String getName() {
