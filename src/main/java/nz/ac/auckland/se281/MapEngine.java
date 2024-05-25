@@ -52,18 +52,8 @@ public class MapEngine {
 
     while (true) {
       try {
-        MessageCli.INSERT_COUNTRY.printMessage();
-        String playerInput = Utils.scanner.nextLine();
-        String countryName = Utils.capitalizeFirstLetterOfEachWord(playerInput);
-
-        if (mapData.containsKey(countryName)) {
-          Country country = mapData.get(countryName);
-          MessageCli.COUNTRY_INFO.printMessage(
-              country.getName(), country.getContinent(), Integer.toString(country.getTax()));
-          break;
-        } else {
-          throw new InvalidCountryException(countryName);
-        }
+        askUserInput();
+        break;
       } catch (InvalidCountryException e) {
         MessageCli.INVALID_COUNTRY.printMessage(e.getMessage());
       }
@@ -72,4 +62,18 @@ public class MapEngine {
 
   /** this method is invoked when the user run the command route. */
   public void showRoute() {}
+
+  public void askUserInput() throws InvalidCountryException {
+    MessageCli.INSERT_COUNTRY.printMessage();
+    String playerInput = Utils.scanner.nextLine();
+    String countryName = Utils.capitalizeFirstLetterOfEachWord(playerInput);
+
+    if (mapData.containsKey(countryName)) {
+      Country country = mapData.get(countryName);
+      MessageCli.COUNTRY_INFO.printMessage(
+          country.getName(), country.getContinent(), Integer.toString(country.getTax()));
+    } else {
+      throw new InvalidCountryException(countryName);
+    }
+  }
 }
