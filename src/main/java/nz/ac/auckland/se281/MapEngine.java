@@ -80,7 +80,7 @@ public class MapEngine {
     for (Country country : path) {
       continents.add(country.getContinent());
       countries.add(country.getName());
-      if (!country.equals(path.get(path.size() - 1))) {
+      if (!country.equals(startNode)) {
         totalTax += country.getTax();
       }
     }
