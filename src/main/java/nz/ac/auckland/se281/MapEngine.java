@@ -65,50 +65,33 @@ public class MapEngine {
   /** this method is invoked when the user run the command route. */
   public void showRoute() {
 
+    Country startNode = null;
+    Country destinationCountry = null;
+
     MessageCli.INSERT_SOURCE.printMessage();
     while (true) {
       try {
-        Country startNode = this.validCountryName();
+        startNode = this.validCountryName();
+        break;
       } catch (InvalidCountryException e) {
         MessageCli.INVALID_COUNTRY.printMessage(e.getMessage());
       }
     }
 
-    // Set<String> visited = new HashSet<>();
-    // Map<String, Country> parentMap = new HashMap<>();
-    // Stack<String> stack = new Stack<>();
-    // stack.push(startNode);
-    // parentMap.put(startNode, null);
+    MessageCli.INSERT_DESTINATION.printMessage();
+    while (true) {
+      try {
+        destinationCountry = this.validCountryName();
+        break;
+      } catch (InvalidCountryException e) {
+        MessageCli.INVALID_COUNTRY.printMessage(e.getMessage());
+      }
+    }
 
-    // while (!stack.isEmpty()) {
-    //     T current = stack.pop();
-    //     if (!visited.contains(current)) {
-    //         visited.add(current);
-    //         for (T neighbor : adjacencyMap.get(current)) {
-    //             if (!visited.contains(neighbor)) {
-    //                 stack.push(neighbor);
-    //                 parentMap.put(neighbor, current);
-    //             } else if (!neighbor.equals(parentMap.get(current)) &&
-    // neighbor.equals(startNode)) {
-    //                 // Cycle detected, reconstruct the path
-    //                 List<T> cyclePath = new ArrayList<>();
-    //                 cyclePath.add(neighbor);
-    //                 T node = current;
-    //                 while (node != null) {
-    //                     cyclePath.add(node);
-    //                     node = parentMap.get(node);
-    //                     if (node != null && node.equals(neighbor)) {
-    //                         cyclePath.add(node);
-    //                         break;
-    //                     }
-    //                 }
-    //                 Collections.reverse(cyclePath);
-    //                 return cyclePath;
-    //             }
-    //         }
-    //     }
-    // }
-    // return null; // No cycle found
+    if (startNode.getName().equals(destinationCountry.getName())) {
+      MessageCli.NO_CROSSBORDER_TRAVEL.printMessage();
+      return;
+    }
   }
 
   public Country validCountryName() throws InvalidCountryException {
