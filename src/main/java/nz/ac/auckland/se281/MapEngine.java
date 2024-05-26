@@ -1,6 +1,7 @@
 package nz.ac.auckland.se281;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -51,44 +52,18 @@ public class MapEngine {
 
   /** this method is invoked when the user run the command info-country. */
   public void showInfoCountry() {
-    MessageCli.INSERT_COUNTRY.printMessage();
-    while (true) {
-      try {
-        Country country = this.validCountryName();
-        MessageCli.COUNTRY_INFO.printMessage(
-            country.getName(), country.getContinent(), Integer.toString(country.getTax()));
-        break;
-      } catch (InvalidCountryException e) {
-        MessageCli.INVALID_COUNTRY.printMessage(e.getMessage());
-      }
-    }
+    Country country = promptForCountry(MessageCli.INSERT_COUNTRY, MessageCli.INVALID_COUNTRY);
+
+    MessageCli.COUNTRY_INFO.printMessage(
+        country.getName(), country.getContinent(), Integer.toString(country.getTax()));
   }
 
   /** this method is invoked when the user run the command route. */
   public void showRoute() {
 
-    Country startNode = null;
-    Country destinationCountry = null;
-
-    MessageCli.INSERT_SOURCE.printMessage();
-    while (true) {
-      try {
-        startNode = this.validCountryName();
-        break;
-      } catch (InvalidCountryException e) {
-        MessageCli.INVALID_COUNTRY.printMessage(e.getMessage());
-      }
-    }
-
-    MessageCli.INSERT_DESTINATION.printMessage();
-    while (true) {
-      try {
-        destinationCountry = this.validCountryName();
-        break;
-      } catch (InvalidCountryException e) {
-        MessageCli.INVALID_COUNTRY.printMessage(e.getMessage());
-      }
-    }
+    Country startNode = promptForCountry(MessageCli.INSERT_SOURCE, MessageCli.INVALID_COUNTRY);
+    Country destinationCountry =
+        promptForCountry(MessageCli.INSERT_DESTINATION, MessageCli.INVALID_COUNTRY);
 
     if (startNode.getName().equals(destinationCountry.getName())) {
       MessageCli.NO_CROSSBORDER_TRAVEL.printMessage();
@@ -115,10 +90,18 @@ public class MapEngine {
 
           if (n.equals(destinationCountry)) {
             List<Country> path = new ArrayList<>();
+            Country current = n;
+            while (current != null) {
+              path.add(current);
+              current = parentMap.get(current);
+            }
+            Collections.reverse(path);
           }
         }
       }
     }
+
+    MessageCli.ROUTE_INFO.printMessage("TODO");
   }
 
   public Country validCountryName() throws InvalidCountryException {
@@ -130,5 +113,19 @@ public class MapEngine {
     } else {
       throw new InvalidCountryException(countryName);
     }
+  }
+
+  public Country promptForCountry(MessageCli insertMessage, MessageCli invalidMessage) {
+    Country country = null;
+    insertMessage.printMessage();
+    while (true) {
+      try {
+        country = validCountryName();
+        break;
+      } catch (InvalidCountryException e) {
+        invalidMessage.printMessage(e.getMessage());
+      }
+    }
+    return country;
   }
 }

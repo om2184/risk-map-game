@@ -42,7 +42,6 @@ public class Country {
     final int prime = 31;
     int result = 1;
     result = prime * result + ((name == null) ? 0 : name.hashCode());
-    result = prime * result + ((continent == null) ? 0 : continent.hashCode());
     return result;
   }
 
@@ -55,9 +54,6 @@ public class Country {
     if (name == null) {
       if (other.name != null) return false;
     } else if (!name.equals(other.name)) return false;
-    if (continent == null) {
-      if (other.continent != null) return false;
-    } else if (!continent.equals(other.continent)) return false;
     return true;
   }
 }
