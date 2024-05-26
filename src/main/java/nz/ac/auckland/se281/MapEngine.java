@@ -3,6 +3,8 @@ package nz.ac.auckland.se281;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
+import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -71,18 +73,23 @@ public class MapEngine {
 
     List<Country> path = findShortestPath(startNode, destinationCountry);
 
-    String pathCountryInfo = getPathInfo(path);
-    Set<String> continents = new HashSet<>();
+    Set<String> continents = new LinkedHashSet<>();
+    Set<String> countries = new LinkedHashSet<>();
     int totalTax = 0;
+
     for (Country country : path) {
       continents.add(country.getContinent());
+      countries.add(country.getName());
       if (!country.equals(path.get(path.size() - 1))) {
         totalTax += country.getTax();
       }
     }
 
+    String pathCountryInfo = getPathInfo(countries);
+    String pathContinentInfo = getPathInfo(continents);
+
     MessageCli.ROUTE_INFO.printMessage(pathCountryInfo);
-    MessageCli.CONTINENT_INFO.printMessage(continents.toString());
+    MessageCli.CONTINENT_INFO.printMessage(pathContinentInfo);
     MessageCli.TAX_INFO.printMessage(Integer.toString(totalTax));
   }
 
@@ -145,16 +152,19 @@ public class MapEngine {
     return null;
   }
 
-  public String getPathInfo(List<Country> path) {
+  public String getPathInfo(Set<String> path) {
     StringBuilder sb = new StringBuilder();
     sb.append("[");
 
-    for (Country country : path) {
-      if (country.equals(path.get(path.size() - 1))) {
-        sb.append(country.getName() + "]");
+    Iterator<String> iterator = path.iterator();
+    while (iterator.hasNext()) {
+      sb.append(iterator.next());
+      if (iterator.hasNext()) {
+        sb.append(", ");
       }
-      sb.append(country.getName() + ", ");
     }
+    sb.append("]");
+
     return sb.toString();
   }
 }
