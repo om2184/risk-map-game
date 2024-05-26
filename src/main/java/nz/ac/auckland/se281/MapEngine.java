@@ -62,16 +62,16 @@ public class MapEngine {
   /** this method is invoked when the user run the command route. */
   public void showRoute() {
 
-    Country startNode = promptForCountry(MessageCli.INSERT_SOURCE, MessageCli.INVALID_COUNTRY);
+    Country sourceCountry = promptForCountry(MessageCli.INSERT_SOURCE, MessageCli.INVALID_COUNTRY);
     Country destinationCountry =
         promptForCountry(MessageCli.INSERT_DESTINATION, MessageCli.INVALID_COUNTRY);
 
-    if (startNode.getName().equals(destinationCountry.getName())) {
+    if (sourceCountry.getName().equals(destinationCountry.getName())) {
       MessageCli.NO_CROSSBORDER_TRAVEL.printMessage();
       return;
     }
 
-    List<Country> path = findShortestPath(startNode, destinationCountry);
+    List<Country> path = findShortestPath(sourceCountry, destinationCountry);
 
     Set<String> continents = new LinkedHashSet<>();
     Set<String> countries = new LinkedHashSet<>();
@@ -80,13 +80,13 @@ public class MapEngine {
     for (Country country : path) {
       continents.add(country.getContinent());
       countries.add(country.getName());
-      if (!country.equals(startNode)) {
+      if (!country.equals(sourceCountry)) {
         totalTax += country.getTax();
       }
     }
 
-    String pathCountryInfo = getPathInfo(countries);
-    String pathContinentInfo = getPathInfo(continents);
+    String pathCountryInfo = pathToString(countries);
+    String pathContinentInfo = pathToString(continents);
 
     MessageCli.ROUTE_INFO.printMessage(pathCountryInfo);
     MessageCli.CONTINENT_INFO.printMessage(pathContinentInfo);
@@ -104,15 +104,15 @@ public class MapEngine {
     }
   }
 
-  public Country promptForCountry(MessageCli insertMessage, MessageCli invalidMessage) {
+  public Country promptForCountry(MessageCli insertCountry, MessageCli invalidCountry) {
     Country country = null;
-    insertMessage.printMessage();
+    insertCountry.printMessage();
     while (true) {
       try {
         country = validCountryName();
         break;
       } catch (InvalidCountryException e) {
-        invalidMessage.printMessage(e.getMessage());
+        invalidCountry.printMessage(e.getMessage());
       }
     }
     return country;
@@ -152,7 +152,7 @@ public class MapEngine {
     return null;
   }
 
-  public String getPathInfo(Set<String> path) {
+  public String pathToString(Set<String> path) {
     StringBuilder sb = new StringBuilder();
     sb.append("[");
 
