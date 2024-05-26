@@ -1,6 +1,5 @@
 package nz.ac.auckland.se281;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -70,38 +69,10 @@ public class MapEngine {
       return;
     }
 
-    // add code here to find the shortest path between the two countries
-    Map<Country, Country> parentMap = new HashMap<>();
-    Set<Country> visited = new HashSet<>();
-    Queue<Country> queue = new LinkedList<>();
+    List<Country> path = findShortestPath(startNode, destinationCountry);
 
-    queue.add(startNode);
-    visited.add(startNode);
-    parentMap.put(startNode, null);
-
-    while (!queue.isEmpty()) {
-      Country node = queue.poll();
-      List<Country> adjacentNodes = node.getNeighbours();
-      for (Country n : adjacentNodes) {
-        if (!visited.contains(n)) {
-          visited.add(n);
-          parentMap.put(n, node);
-          queue.add(n);
-
-          if (n.equals(destinationCountry)) {
-            List<Country> path = new ArrayList<>();
-            Country current = n;
-            while (current != null) {
-              path.add(current);
-              current = parentMap.get(current);
-            }
-            Collections.reverse(path);
-          }
-        }
-      }
-    }
-
-    MessageCli.ROUTE_INFO.printMessage("TODO");
+    String pathInfo = getPathInfo(path);
+    MessageCli.ROUTE_INFO.printMessage(pathInfo);
   }
 
   public Country validCountryName() throws InvalidCountryException {
@@ -127,5 +98,52 @@ public class MapEngine {
       }
     }
     return country;
+  }
+
+  public List<Country> findShortestPath(Country startNode, Country destinationCountry) {
+    Map<Country, Country> parentMap = new HashMap<>();
+    Set<Country> visited = new HashSet<>();
+    Queue<Country> queue = new LinkedList<>();
+
+    queue.add(startNode);
+    visited.add(startNode);
+    parentMap.put(startNode, null);
+
+    while (!queue.isEmpty()) {
+      Country node = queue.poll();
+      List<Country> adjacentNodes = node.getNeighbours();
+      for (Country n : adjacentNodes) {
+        if (!visited.contains(n)) {
+          visited.add(n);
+          parentMap.put(n, node);
+          queue.add(n);
+
+          if (n.equals(destinationCountry)) {
+            List<Country> path = new LinkedList<>();
+            Country current = n;
+            while (current != null) {
+              path.add(current);
+              current = parentMap.get(current);
+            }
+            Collections.reverse(path);
+            return path;
+          }
+        }
+      }
+    }
+    return null;
+  }
+
+  public String getPathInfo(List<Country> path) {
+    StringBuilder sb = new StringBuilder();
+    sb.append("[");
+
+    for (Country country : path) {
+      if (country.equals(path.get(path.size() - 1))) {
+        sb.append(country.getName() + "]");
+      }
+      sb.append(country.getName() + ", ");
+    }
+    return sb.toString();
   }
 }
