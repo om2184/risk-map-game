@@ -71,8 +71,19 @@ public class MapEngine {
 
     List<Country> path = findShortestPath(startNode, destinationCountry);
 
-    String pathInfo = getPathInfo(path);
-    MessageCli.ROUTE_INFO.printMessage(pathInfo);
+    String pathCountryInfo = getPathInfo(path);
+    Set<String> continents = new HashSet<>();
+    int totalTax = 0;
+    for (Country country : path) {
+      continents.add(country.getContinent());
+      if (!country.equals(path.get(path.size() - 1))) {
+        totalTax += country.getTax();
+      }
+    }
+
+    MessageCli.ROUTE_INFO.printMessage(pathCountryInfo);
+    MessageCli.CONTINENT_INFO.printMessage(continents.toString());
+    MessageCli.TAX_INFO.printMessage(Integer.toString(totalTax));
   }
 
   public Country validCountryName() throws InvalidCountryException {
