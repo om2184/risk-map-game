@@ -3,6 +3,10 @@ package nz.ac.auckland.se281;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Represents a country in the world map. Each country has a name, a continent, a tax rate and a
+ * list of neighbouring countries.
+ */
 public class Country {
 
   private String name;
@@ -57,6 +61,7 @@ public class Country {
       return false;
     }
     Country other = (Country) obj;
+    // We only compare the name of the country as it is the only unique identifier
     if (!name.equals(other.name)) {
       return false;
     }

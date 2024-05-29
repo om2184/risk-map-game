@@ -25,9 +25,8 @@ public class MapEngine {
   private void loadMap() {
     List<String> countries = Utils.readCountries();
     List<String> adjacencies = Utils.readAdjacencies();
-    // add code here to create your data structures
 
-    // add code here to populate the mapData
+    // Create a map of countries
     for (String country : countries) {
       String[] countryData = country.split(",");
       String name = countryData[0];
@@ -37,6 +36,7 @@ public class MapEngine {
       mapData.put(name, newCountry);
     }
 
+    // Add the neighbors to the countries
     for (String adjacency : adjacencies) {
       String[] adjacencyData = adjacency.split(",");
       String mainCountry = adjacencyData[0];
@@ -62,21 +62,26 @@ public class MapEngine {
   /** this method is invoked when the user run the command route. */
   public void showRoute() {
 
+    // prompt the user for the source and destination countries
     Country sourceCountry = promptForCountry(MessageCli.INSERT_SOURCE, MessageCli.INVALID_COUNTRY);
     Country destinationCountry =
         promptForCountry(MessageCli.INSERT_DESTINATION, MessageCli.INVALID_COUNTRY);
 
+    // check if the source and destination countries are the same
     if (sourceCountry.getName().equals(destinationCountry.getName())) {
       MessageCli.NO_CROSSBORDER_TRAVEL.printMessage();
       return;
     }
 
+    // find the shortest path between the source and destination countries
     List<Country> path = findShortestPath(sourceCountry, destinationCountry);
 
+    // Create string sets to store the continents and countries in the path
     Set<String> continents = new LinkedHashSet<>();
     Set<String> countries = new LinkedHashSet<>();
     int totalTax = 0;
 
+    // Add the countries and continents to the sets
     for (Country country : path) {
       continents.add(country.getContinent());
       countries.add(country.getName());
@@ -85,9 +90,11 @@ public class MapEngine {
       }
     }
 
+    // Convert the sets to strings
     String pathCountryInfo = pathToString(countries);
     String pathContinentInfo = pathToString(continents);
 
+    // Print the path information
     MessageCli.ROUTE_INFO.printMessage(pathCountryInfo);
     MessageCli.CONTINENT_INFO.printMessage(pathContinentInfo);
     MessageCli.TAX_INFO.printMessage(Integer.toString(totalTax));
@@ -107,6 +114,7 @@ public class MapEngine {
   public Country promptForCountry(MessageCli insertCountry, MessageCli invalidCountry) {
     Country country = null;
     insertCountry.printMessage();
+    // Keep prompting the user until a valid country is entered
     while (true) {
       try {
         country = validCountryName();
@@ -119,7 +127,8 @@ public class MapEngine {
   }
 
   public List<Country> findShortestPath(Country startNode, Country destinationCountry) {
-    Map<Country, Country> parentMap = new HashMap<>();
+
+    Map<Country, Country> parentMap = new HashMap<>(); // to store the parent of each country
     Set<Country> visited = new HashSet<>();
     Queue<Country> queue = new LinkedList<>();
 
@@ -127,6 +136,7 @@ public class MapEngine {
     visited.add(startNode);
     parentMap.put(startNode, null);
 
+    // Perform a BFS to find the shortest path
     while (!queue.isEmpty()) {
       Country node = queue.poll();
       List<Country> adjacentNodes = node.getNeighbours();
@@ -136,6 +146,7 @@ public class MapEngine {
           parentMap.put(n, node);
           queue.add(n);
 
+          // If the destination country is found, return the path
           if (n.equals(destinationCountry)) {
             List<Country> path = new LinkedList<>();
             Country current = n;
@@ -153,6 +164,7 @@ public class MapEngine {
   }
 
   public String pathToString(Set<String> path) {
+    // Convert the set to a string
     StringBuilder sb = new StringBuilder();
     sb.append("[");
 
