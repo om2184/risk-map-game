@@ -14,6 +14,13 @@ public class Country {
   private int tax;
   private List<Country> neighbours;
 
+  /**
+   * Constructs a new country with the given name, continent and tax rate.
+   *
+   * @param name the name of the country
+   * @param continent the continent the country is in
+   * @param tax the tax rate of the country
+   */
   public Country(String name, String continent, int tax) {
     this.name = name;
     this.continent = continent;

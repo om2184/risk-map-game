@@ -100,6 +100,12 @@ public class MapEngine {
     MessageCli.TAX_INFO.printMessage(Integer.toString(totalTax));
   }
 
+  /**
+   * This method is used to validate the country name entered by the user.
+   *
+   * @return the country object if the country name is valid.
+   * @throws InvalidCountryException if the country name is invalid.
+   */
   public Country validCountryName() throws InvalidCountryException {
     String playerInput = Utils.scanner.nextLine();
     String countryName = Utils.capitalizeFirstLetterOfEachWord(playerInput);
@@ -111,6 +117,14 @@ public class MapEngine {
     }
   }
 
+  /**
+   * This method is used to prompt the user for a country. It will keep prompting the user until a
+   * valid country is entered.
+   *
+   * @param insertCountry the message to prompt the user to insert a country.
+   * @param invalidCountry the message to prompt the user when an input is invalid.
+   * @return the country object of the country entered by the user.
+   */
   public Country promptForCountry(MessageCli insertCountry, MessageCli invalidCountry) {
     Country country = null;
     insertCountry.printMessage();
@@ -126,8 +140,14 @@ public class MapEngine {
     return country;
   }
 
+  /**
+   * This method is used to find the shortest path between two countries using BFS.
+   *
+   * @param startNode the starting country of the path.
+   * @param destinationCountry the destination country of the path.
+   * @return the path between the two countries containing the countries in the path.
+   */
   public List<Country> findShortestPath(Country startNode, Country destinationCountry) {
-
     Map<Country, Country> parentMap = new HashMap<>(); // to store the parent of each country
     Set<Country> visited = new HashSet<>();
     Queue<Country> queue = new LinkedList<>();
@@ -163,6 +183,12 @@ public class MapEngine {
     return null;
   }
 
+  /**
+   * This method is used to convert a set of strings to a string.
+   *
+   * @param path the set of strings to be converted.
+   * @return the string representation of the set.
+   */
   public String pathToString(Set<String> path) {
     // Convert the set to a string
     StringBuilder sb = new StringBuilder();
